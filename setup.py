@@ -27,6 +27,7 @@ setup(
     description='VLAN Manager for multiple VLAN Groups',
     long_description=long_description,
     long_description_content_type="text/markdown",
+    url="https://github.com/miyuk/netbox-vlan-manager/",
     author='miyuk',
     author_email='miyuk@miyuk.net',
     packages=find_packages(),
