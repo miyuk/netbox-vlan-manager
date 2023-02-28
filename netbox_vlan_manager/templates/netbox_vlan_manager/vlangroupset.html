@@ -15,7 +15,7 @@
             <td>{{ object.description }}</td>
           </tr>
           <tr>
-            <th scope="row">VLAN Groups</th>
+            <th scope="row">VLAN Groups </th>
             <td>{{ object.vlan_groups.count }}</td>
           </tr>
         </table>
@@ -33,7 +33,7 @@
     <div class="card">
       <h5 class="card-header">VLAN Groups</h5>
       <div class="card-body table-responsive">
-        {% comment %} {% render_table vlan_groups_table %} {% endcomment %}
+        {% include 'netbox_vlan_manager/vlangroupset_vlans.html' %}
       </div>
     </div>
   </div>

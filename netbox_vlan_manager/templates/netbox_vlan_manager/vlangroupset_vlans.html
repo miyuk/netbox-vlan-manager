@@ -1,0 +1,42 @@
+<div class="table-responsive">
+  <table class="table table-hover object-list">
+    <thead>
+      <tr>
+        <th>
+          <a href="#">VID</a>
+        </th>
+        {% for vlan_group in object.vlan_groups.all %}
+        <th colspan="2">
+          <a href="#">{{ vlan_group.name }}</a>
+        </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for vid, vlans in vlan_group_vlans.items %}
+      <tr class="{% cycle 'odd' 'even' %}">
+        <td>{{ vid }}</td>
+        {% for vlan_group_id, vlan in vlans.items %}
+        {% if vlan.pk %}
+        <td colspan="1">
+          <a href="{{ vlan.get_absolute_url }}">
+            {{ vlan.name }}
+          </a>
+        </td>
+        <td colspan="1">
+          {% badge vlan.get_status_display bg_color=vlan.get_status_color %}
+        </td>
+        {% else %}
+        <td>-</td>
+        <td colspan="1">
+          <a href="{% url 'ipam:vlan_add' %}?vid={{ vid }}&group={{ vlan_group_id }}" class="btn btn-sm btn-success">
+            Available
+          </a>
+        </td>
+        {% endif %}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
