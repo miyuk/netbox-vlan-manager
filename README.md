@@ -2,6 +2,8 @@
 
 NetBox plugin for viewer of multiple VLAN Group spaces.
 
+[![PyPI version](https://badge.fury.io/py/netbox-vlan-manager.svg)](https://badge.fury.io/py/netbox-vlan-manager)
+
 ## Features
 
 This plugin provide following Models:
