@@ -33,7 +33,8 @@
     <div class="card">
       <h5 class="card-header">VLAN Groups</h5>
       <div class="card-body table-responsive">
-        {% include 'netbox_vlan_manager/vlangroupset_vlans.html' %}
+        {% render_table vlans_table %}
+        {% include 'inc/paginator.html' with paginator=vlans_table.paginator page=vlans_table.page %}
       </div>
     </div>
   </div>
