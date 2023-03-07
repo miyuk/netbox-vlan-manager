@@ -1,7 +1,7 @@
 from django.db.models import Count
 from netbox.views import generic
-from . import models, tables, forms
 from ipam.models import VLAN
+from . import models, tables, forms
 from .tables import VLANGroupSetVLANTable
 
 
@@ -17,9 +17,13 @@ class VLANGroupSetView(generic.ObjectView):
         for vid in range(min_vid, max_vid + 1):
             item = {}
             item['vid'] = vid
-            item['vlans'] = list(VLAN.objects.filter(vid=vid))
+            vlans = VLAN.objects.filter(vid=vid)
+            item['vlans'] = vlans
+            item['status'] = 'Available' if vlans.count() == 0 else 'In Use'
             vlan_group_vlans.append(item)
-        vlans_table = VLANGroupSetVLANTable(vlan_group_vlans)
+        vlans_table = VLANGroupSetVLANTable(
+            vlan_group_vlans, vlan_groups=vlan_groups)
+        vlans_table.configure(request)
 
         return {
             'vlans_table': vlans_table
