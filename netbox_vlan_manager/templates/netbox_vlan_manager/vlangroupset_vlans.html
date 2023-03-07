@@ -1,42 +1,43 @@
-<div class="table-responsive">
-  <table class="table table-hover object-list">
-    <thead>
-      <tr>
-        <th>
-          <a href="#">VID</a>
-        </th>
-        {% for vlan_group in object.vlan_groups.all %}
-        <th colspan="2">
-          <a href="#">{{ vlan_group.name }}</a>
-        </th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for vid, vlans in vlan_group_vlans.items %}
-      <tr class="{% cycle 'odd' 'even' %}">
-        <td>{{ vid }}</td>
-        {% for vlan_group_id, vlan in vlans.items %}
-        {% if vlan.pk %}
-        <td colspan="1">
-          <a href="{{ vlan.get_absolute_url }}">
-            {{ vlan.name }}
-          </a>
-        </td>
-        <td colspan="1">
-          {% badge vlan.get_status_display bg_color=vlan.get_status_color %}
-        </td>
-        {% else %}
-        <td>-</td>
-        <td colspan="1">
-          <a href="{% url 'ipam:vlan_add' %}?vid={{ vid }}&group={{ vlan_group_id }}" class="btn btn-sm btn-success">
-            Available
-          </a>
-        </td>
-        {% endif %}
-        {% endfor %}
-      </tr>
+{% load django_tables2 %}
+
+<table{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
+  {% if table.show_header %}
+  <thead>
+    <tr>
+      {% for column in table.columns %}
+      {% if column.orderable %}
+      <th {{ column.attrs.th.as_html }}><a
+          href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a></th>
+      {% else %}
+      <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
+      {% endif %}
       {% endfor %}
-    </tbody>
+    </tr>
+  </thead>
+  {% endif %}
+  <tbody>
+    {% for row in table.page.object_list|default:table.rows %}
+    <tr {{ row.attrs.as_html }}>
+      {% for column, cell in row.items %}
+      <td {{ column.attrs.td.as_html }}>{{ cell }}</td>
+      {% endfor %}
+    </tr>
+    {% empty %}
+    {% if table.empty_text %}
+    <tr>
+      <td colspan="{{ table.columns|length }}" class="text-center text-muted">&mdash; {{ table.empty_text }} &mdash;
+      </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+  {% if table.has_footer %}
+  <tfoot>
+    <tr>
+      {% for column in table.columns %}
+      <td>{{ column.footer }}</td>
+      {% endfor %}
+    </tr>
+  </tfoot>
+  {% endif %}
   </table>
-</div>
