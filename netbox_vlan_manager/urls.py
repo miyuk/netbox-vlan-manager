@@ -36,4 +36,9 @@ urlpatterns = (
             'model': models.VLANGroupSet
         }
     ),
+    path(
+        'vlan-group-sets/<int:pk>/export-vlans/',
+        views.VLANGroupSetExportVLANs.as_view(),
+        name='export_vlans'
+    ),
 )

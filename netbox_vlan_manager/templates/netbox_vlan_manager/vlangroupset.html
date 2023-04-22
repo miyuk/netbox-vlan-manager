@@ -17,7 +17,7 @@
             <td>{{ object.description }}</td>
           </tr>
           <tr>
-            <th scope="row">VLAN Groups </th>
+            <th scope="row">VLAN Groups</th>
             <td>{{ object.vlan_groups.count }}</td>
           </tr>
         </table>
@@ -33,7 +33,16 @@
 <div class="row">
   <div class="col col-md-12">
     <div class="card">
-      <h5 class="card-header">VLAN Groups</h5>
+      <div class="title-container">
+        <h5 class="card-header">VLAN Groups</h5>
+        <div class="controls">
+          <div class="control-group px-3 py-3">
+            <a type="button" class="btn btn-sm btn-purple" href="./export-vlans">
+              <i class="mdi mdi-download"></i>&nbsp;Export
+            </a>
+          </div>
+        </div>
+      </div>
       <div class="card-body table-responsive">
         {% render_table vlans_table %}
         {% include 'inc/paginator.html' with paginator=vlans_table.paginator page=vlans_table.page %}
