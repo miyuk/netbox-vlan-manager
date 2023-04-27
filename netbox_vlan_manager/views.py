@@ -1,12 +1,13 @@
 from django.db.models import Count
+from django_tables2.export.export import TableExport
 from netbox.views import generic
 from ipam.models import VLAN
-from . import models, tables, forms
-from .tables import VLANGroupSetVLANTable
-from django_tables2.export.export import TableExport
+from .models import VLANGroupSet
+from .forms import VLANGroupSetForm
+from .tables import VLANGroupSetVLANTable, VLANGroupSetTable
 
 class VLANGroupSetView(generic.ObjectView):
-    queryset = models.VLANGroupSet.objects.all()
+    queryset = VLANGroupSet.objects.all()
 
     def get_extra_context(self, request, instance):
         vlan_groups = instance.vlan_groups.all()
@@ -31,22 +32,22 @@ class VLANGroupSetView(generic.ObjectView):
 
 
 class VLANGroupSetListView(generic.ObjectListView):
-    queryset = models.VLANGroupSet.objects.annotate(
+    queryset = VLANGroupSet.objects.annotate(
         vlan_group_count=Count('vlan_groups')
     )
-    table = tables.VLANGroupSetTable
+    table = VLANGroupSetTable
 
 
 class VLANGroupSetEditView(generic.ObjectEditView):
-    queryset = models.VLANGroupSet.objects.all()
-    form = forms.VLANGroupSetForm
+    queryset = VLANGroupSet.objects.all()
+    form = VLANGroupSetForm
 
 
 class VLANGroupSetDeleteView(generic.ObjectDeleteView):
-    queryset = models.VLANGroupSet.objects.all()
+    queryset = VLANGroupSet.objects.all()
 
 class VLANGroupSetExportVLANs(generic.ObjectView):
-    queryset = models.VLANGroupSet.objects.all()
+    queryset = VLANGroupSet.objects.all()
 
     def get(self, request, **kwargs):
         print(kwargs)
