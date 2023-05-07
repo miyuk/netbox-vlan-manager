@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from netbox.models import NetBoxModel
+from ipam.models import VLAN
 
 
 class VLANGroupSet(NetBoxModel):
@@ -29,3 +30,19 @@ class VLANGroupSet(NetBoxModel):
 
     def get_absolute_url(self):
         return reverse(f'plugins:netbox_vlan_manager:vlangroupset', kwargs={'pk': self.pk})
+
+    @property
+    def vlans(self):
+        vlan_groups = self.vlan_groups.all()
+        max_vid = max(vlan_groups, key=(lambda x: x.max_vid)).max_vid
+        min_vid = min(vlan_groups, key=(lambda x: x.min_vid)).min_vid
+
+        vlan_group_vlans = []
+        for vid in range(min_vid, max_vid + 1):
+            item = {}
+            item['vid'] = vid
+            vlans = VLAN.objects.filter(vid=vid, group__in=vlan_groups)
+            item['vlans'] = vlans
+            item['status'] = 'Available' if not vlans else 'In Use'
+            vlan_group_vlans.append(item)
+        return vlan_group_vlans
