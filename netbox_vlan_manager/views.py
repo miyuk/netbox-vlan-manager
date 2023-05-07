@@ -6,22 +6,13 @@ from .models import VLANGroupSet
 from .forms import VLANGroupSetForm
 from .tables import VLANGroupSetVLANTable, VLANGroupSetTable
 
+
 class VLANGroupSetView(generic.ObjectView):
     queryset = VLANGroupSet.objects.all()
 
     def get_extra_context(self, request, instance):
         vlan_groups = instance.vlan_groups.all()
-        max_vid = max(vlan_groups, key=(lambda x: x.max_vid)).max_vid
-        min_vid = min(vlan_groups, key=(lambda x: x.min_vid)).min_vid
-
-        vlan_group_vlans = []
-        for vid in range(min_vid, max_vid + 1):
-            item = {}
-            item['vid'] = vid
-            vlans = VLAN.objects.filter(vid=vid)
-            item['vlans'] = vlans
-            item['status'] = 'Available' if vlans.count() == 0 else 'In Use'
-            vlan_group_vlans.append(item)
+        vlan_group_vlans = instance.vlans
         vlans_table = VLANGroupSetVLANTable(
             vlan_group_vlans, vlan_groups=vlan_groups)
         vlans_table.configure(request)
@@ -46,24 +37,18 @@ class VLANGroupSetEditView(generic.ObjectEditView):
 class VLANGroupSetDeleteView(generic.ObjectDeleteView):
     queryset = VLANGroupSet.objects.all()
 
+
 class VLANGroupSetExportVLANs(generic.ObjectView):
     queryset = VLANGroupSet.objects.all()
 
     def get(self, request, **kwargs):
-        print(kwargs)
         instance = self.get_object(**kwargs)
         vlan_groups = instance.vlan_groups.all()
-        max_vid = max(vlan_groups, key=(lambda x: x.max_vid)).max_vid
-        min_vid = min(vlan_groups, key=(lambda x: x.min_vid)).min_vid
+        vlan_group_vlans = instance.vlans
+        vlans_table = VLANGroupSetVLANTable(
+            vlan_group_vlans, vlan_groups=vlan_groups)
+        vlans_table.configure(request)
 
-        vlan_group_vlans = []
-        for vid in range(min_vid, max_vid + 1):
-            item = {}
-            item['vid'] = vid
-            vlans = VLAN.objects.filter(vid=vid)
-            item['vlans'] = vlans
-            item['status'] = 'Available' if vlans.count() == 0 else 'In Use'
-            vlan_group_vlans.append(item)
         vlans_table = VLANGroupSetVLANTable(
             vlan_group_vlans, vlan_groups=vlan_groups)
         vlans_table.configure(request)

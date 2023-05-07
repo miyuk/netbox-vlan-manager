@@ -1,3 +1,4 @@
+from netbox.models import NetBoxModel
 from django.urls import reverse
 import django_tables2 as tables
 from netbox.tables import NetBoxTable, BaseTable
@@ -58,6 +59,7 @@ class VLANGroupSetVLANTable(BaseTable):
     status = tables.TemplateColumn(template_code=VLAN_STATUS)
 
     class Meta(BaseTable.Meta):
+        model = NetBoxModel
         template_name = 'netbox_vlan_manager/vlangroupset_vlans.html'
         empty_text = 'No VLANs found'
         fields = (
