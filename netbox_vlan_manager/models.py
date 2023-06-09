@@ -46,3 +46,26 @@ class VLANGroupSet(NetBoxModel):
             item['status'] = 'Available' if not vlans else 'In Use'
             vlan_group_vlans.append(item)
         return vlan_group_vlans
+
+    def get_available_vids(self):
+        vlan_groups = self.vlan_groups.all()
+        max_vid = max(vlan_groups, key=(lambda x: x.max_vid)).max_vid
+        min_vid = min(vlan_groups, key=(lambda x: x.min_vid)).min_vid
+
+        available_vlans = {
+            vid for vid in range(min_vid, max_vid + 1)
+        }
+        for vlan_group in vlan_groups:
+            available_vlans -= set(
+                VLAN.objects.filter(group=vlan_group).values_list(
+                    'vid', flat=True
+                )
+            )
+
+        return sorted(available_vlans)
+
+    def get_next_available_vid(self):
+        available_vids = self.get_available_vids()
+        if available_vids:
+            return available_vids[0]
+        return None
