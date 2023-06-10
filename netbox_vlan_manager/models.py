@@ -32,35 +32,32 @@ class VLANGroupSet(NetBoxModel):
         return reverse(f'plugins:netbox_vlan_manager:vlangroupset', kwargs={'pk': self.pk})
 
     @property
+    def min_vid(self):
+        return min(self.vlan_groups.all(), key=(lambda x: x.min_vid)).min_vid
+
+    @property
+    def max_vid(self):
+        return max(self.vlan_groups.all(), key=(lambda x: x.max_vid)).max_vid
+
+    @property
     def vlans(self):
         vlan_groups = self.vlan_groups.all()
-        max_vid = max(vlan_groups, key=(lambda x: x.max_vid)).max_vid
-        min_vid = min(vlan_groups, key=(lambda x: x.min_vid)).min_vid
+        group_vlans = VLAN.objects.filter(
+            group__in=vlan_groups).select_related('group')
 
         vlan_group_vlans = []
-        for vid in range(min_vid, max_vid + 1):
+        for vid in range(self.min_vid, self.max_vid + 1):
             item = {}
             item['vid'] = vid
-            vlans = VLAN.objects.filter(vid=vid, group__in=vlan_groups)
+            vlans = [x for x in group_vlans if x.vid == vid]
             item['vlans'] = vlans
             item['status'] = 'Available' if not vlans else 'In Use'
             vlan_group_vlans.append(item)
         return vlan_group_vlans
 
     def get_available_vids(self):
-        vlan_groups = self.vlan_groups.all()
-        max_vid = max(vlan_groups, key=(lambda x: x.max_vid)).max_vid
-        min_vid = min(vlan_groups, key=(lambda x: x.min_vid)).min_vid
-
-        available_vlans = {
-            vid for vid in range(min_vid, max_vid + 1)
-        }
-        for vlan_group in vlan_groups:
-            available_vlans -= set(
-                VLAN.objects.filter(group=vlan_group).values_list(
-                    'vid', flat=True
-                )
-            )
+        available_vlans = set([x['vid']
+                               for x in self.vlans if x['status'] == 'Available'])
 
         return sorted(available_vlans)
 
