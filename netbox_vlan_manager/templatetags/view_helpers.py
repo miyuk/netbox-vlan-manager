@@ -4,5 +4,5 @@ register = template.Library()
 
 @register.filter
 def get_vlan_by_group(record, vlan_group):
-    vlan = record['vlans'].filter(group=vlan_group).first()
+    vlan = ([x for x in record['vlans'] if x.group == vlan_group] or [None])[0]
     return vlan
