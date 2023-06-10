@@ -18,6 +18,7 @@ Each Plugin Version listed below has been tested with its corresponding NetBox V
 | NetBox Version | Plugin Version |
 | :------------: | :------------: |
 |      3.4       |     0.0.1      |
+|      3.5       |     0.0.4      |
 
 ## Installation
 

@@ -35,7 +35,7 @@ setup(
     install_requires=[],
     zip_safe=False,
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status:: 3 - Alpha',
         'Framework :: Django',
         'Programming Language :: Python :: 3',
     ]
