@@ -1,5 +1,6 @@
 import os
 from distutils.util import strtobool
+import socket
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -136,7 +137,11 @@ EXEMPT_VIEW_PERMISSIONS = [
 
 # IP addresses recognized as internal to the system. The debugging toolbar will be available only to clients accessing
 # NetBox from an internal IP.
-INTERNAL_IPS = ('127.0.0.1', '::1')
+INTERNAL_IPS = ['127.0.0.1', '::1']
+
+# Add container network first address because client connection is NATed by Docker
+container_ips = socket.gethostbyname_ex(socket.gethostname())[2]
+INTERNAL_IPS += ['.'.join(x.split('.')[:3] + ['1']) for x in container_ips]
 
 # Enable custom logging. Please see the Django documentation for detailed guidance on configuring custom logs:
 #   https://docs.djangoproject.com/en/stable/topics/logging/
