@@ -11,14 +11,21 @@ class VLANGroupSetView(generic.ObjectView):
     queryset = VLANGroupSet.objects.all()
 
     def get_extra_context(self, request, instance):
+        show_available = bool(request.GET.get('show_available', 'true') == 'true')
+        show_assigned = bool(request.GET.get('show_assigned', 'true') == 'true')
         vlan_groups = instance.vlan_groups.all()
         vlan_group_vlans = instance.vlans
-        vlans_table = VLANGroupSetVLANTable(
-            vlan_group_vlans, vlan_groups=vlan_groups)
+        requested_vlans = [
+            x for x in vlan_group_vlans
+            if show_available and x['status'] == 'Available' or show_assigned and x['status'] == 'Assigned'
+        ]
+        vlans_table = VLANGroupSetVLANTable(requested_vlans, vlan_groups=vlan_groups)
         vlans_table.configure(request)
 
         return {
-            'vlans_table': vlans_table
+            'vlans_table': vlans_table,
+            'show_available': show_available,
+            'show_assigned': show_assigned,
         }
 
 

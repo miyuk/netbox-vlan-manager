@@ -51,7 +51,7 @@ class VLANGroupSet(NetBoxModel):
             item['vid'] = vid
             vlans = [x for x in group_vlans if x.vid == vid]
             item['vlans'] = vlans
-            item['status'] = 'Available' if not vlans else 'In Use'
+            item['status'] = 'Available' if not vlans else 'Assigned'
             vlan_group_vlans.append(item)
         return vlan_group_vlans
 
