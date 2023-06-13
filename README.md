@@ -5,11 +5,41 @@ NetBox plugin for viewer of multiple VLAN Group spaces.
 ![PyPI](https://img.shields.io/pypi/v/netbox-vlan-manager)
 ![publish PyPI workflow](https://github.com/miyuk/netbox-vlan-manager/actions/workflows/pub-pypi.yml/badge.svg)
 
+
+## Purpose
+
+Enterprise environment has a lot of routers or switches.
+These devices manage VLAN each other.
+
+In many case, these manage one VLAN space.
+On the other hand, complex network has multiple VLAN spaces
+
+For example, below cases.
+
+- Manage Head Quarter and Branch building WAN and LAN VLANs
+- Visualize Cisco ACI Leaf Switch VLANs using Global Scope [*](https://learningnetwork.cisco.com/s/article/l2-interface-policy-global-scope-port-local-scope)
+
+NetBox can manage VLAN space as `VLAN Group`.
+However, it can one VLAN Group only.
+
+NetBox VLAN Manager manage multiple `VLAN Group` as `VLAN Group Set`, and visualize status in tabular form
+
+
 ## Features
+
+### Models
 
 This plugin provide following Models:
 
 - VLAN Group Set
+    - Manage multiple VLAN Group
+
+### API
+
+This plugin provide following API:
+
+- Avaiable VLAN
+    - Extract none used VID searching all VLAN Groups
 
 ## Compatibility
 
