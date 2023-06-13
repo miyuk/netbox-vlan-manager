@@ -15,7 +15,7 @@ services:
       - ./dev.env
     volumes:
       - ./configuration.py:/opt/netbox/netbox/netbox/configuration.py
-      - ../netbox_vlan_manager:/source/netbox_vlan_manager
+      - ../netbox_vlan_manager:/opt/plugin/netbox_vlan_manager
   worker:
     build:
       context: ../
@@ -27,7 +27,7 @@ services:
       - ./dev.env
     volumes:
       - ./configuration.py:/opt/netbox/netbox/netbox/configuration.py
-      - ../netbox_vlan_manager:/source/netbox_vlan_manager
+      - ../netbox_vlan_manager:/opt/plugin/netbox_vlan_manager
   postgres:
     image: postgres:12
     env_file: dev.env
