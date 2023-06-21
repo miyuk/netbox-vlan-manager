@@ -61,7 +61,7 @@ pip install netbox-vlan-manager
 Enable the plugin in /opt/netbox/netbox/netbox/configuration.py
 
 ```python
-PLUGINS = ['netbox-vlan-manager']
+PLUGINS = ['netbox_vlan_manager']
 ```
 
 Restart NetBox
