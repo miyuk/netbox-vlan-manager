@@ -1,0 +1,1 @@
+recursive-include netbox_vlan_manager/templates *.html
