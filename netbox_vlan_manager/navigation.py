@@ -1,4 +1,4 @@
-from extras.plugins import PluginMenuItem, PluginMenuButton, PluginMenuItem
+from netbox.plugins import PluginMenuItem, PluginMenuButton, PluginMenuItem
 from utilities.choices import ButtonColorChoices
 
 vlan_group_manager_buttons = [
