@@ -45,6 +45,13 @@ This plugin provides following API:
 
 This plugin requires NetBox `v3.4.0` or later because has migration scripts compatibility.
 
+The compatibility table between plugin versions and netbox is as follows.
+
+|NetBox version|Plugin version|
+|---|---|
+|3.x.x|0.1.x|
+|4.x.x|0.2.x|
+
 ## Installation
 
 The plugin is available as a Python package in PyPI and can be installed with pip:
